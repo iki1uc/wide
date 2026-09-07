@@ -1,0 +1,72 @@
+// ============================================================
+// NC.math PRO · Kontextsensitiv · 9hoch9-aware · Engine-aware
+// ============================================================
+
+import { NINEHOCH9 } from "./9^.js";
+
+export const NC = {
+
+    name: "NC.unknown",
+    context: "none",
+    matrix: null,
+    engine: null,
+
+    // Kontext erkennen
+    detectContext(){
+        // ID.html
+        if (document.title.includes("ID") || document.getElementById("cube")) {
+            this.context = "visio";
+            this.name = "NC.visio";
+        }
+
+        // index.html
+        if (document.getElementById("statusText") || document.getElementById("btnStart")) {
+            this.context = "engine";
+            this.name = "NC.engine";
+        }
+
+        // README (nur wenn importiert)
+        if (location.pathname.includes("README")) {
+            this.context = "docu";
+            this.name = "NC.docu";
+        }
+
+        console.log("NC.math Kontext:", this.context, "→ Name:", this.name);
+    },
+
+    init(engineRef = null){
+        this.detectContext();
+
+        const M = new NINEHOCH9();
+        this.matrix = M.build();
+
+        if(engineRef){
+            this.engine = engineRef;
+        }
+
+        console.log("NC.math PRO initialisiert im Kontext:", this.context);
+    },
+
+    // Kraft abhängig vom Kontext
+    force(r, c){
+        const qi   = this.matrix.qi(r, c);
+        const iqq  = this.matrix.iqq(r, c);
+        const octa = this.matrix.octa[r][c];
+
+        let base = qi + iqq + octa;
+
+        if(this.context === "engine"){
+            base *= 1.8; // Engine hat mehr Kraft
+        }
+
+        if(this.context === "visio"){
+            base *= 1.2; // Visio hat visuelle Kraft
+        }
+
+        if(this.context === "docu"){
+            base *= 0.8; // Dokumentation ist abgeschwächt
+        }
+
+        return base;
+    }
+};

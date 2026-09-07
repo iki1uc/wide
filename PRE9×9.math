@@ -1,0 +1,70 @@
+// ============================================================
+// PRE9×9.math PRO · Kontextsensitiv · 9hoch9-aware · ULTRA-aware
+// ============================================================
+
+import { NINEHOCH9 } from "./9^.js";
+
+export const PRE9 = {
+
+    name: "PRE9.unknown",
+    context: "none",
+    matrix: null,
+
+    init(){
+        this.detectContext();
+
+        const M = new NINEHOCH9();
+        this.matrix = M.build();
+
+        console.log("PRE9×9.math PRO initialisiert:", this.name, "→ Kontext:", this.context);
+    },
+
+    // Kontext erkennen
+    detectContext(){
+        // ID.html → Cylinder / Visio
+        if (document.title.includes("ID") || document.getElementById("cube")) {
+            this.context = "visio";
+            this.name = "PRE9.visio";
+        }
+
+        // index.html → Engine / Steuerung
+        if (document.getElementById("statusText") || document.getElementById("btnStart")) {
+            this.context = "engine";
+            this.name = "PRE9.engine";
+        }
+
+        // README → Dokumentation
+        if (location.pathname.includes("README")) {
+            this.context = "docu";
+            this.name = "PRE9.docu";
+        }
+    },
+
+    // PREFETCH‑Modi abhängig vom Kontext
+    prefetchMode(){
+        if(this.context === "engine"){
+            return "ULTRA-U";
+        }
+        if(this.context === "visio"){
+            return "ULTRA-VISIO";
+        }
+        return "ULTRA-DOCU";
+    },
+
+    // 3×3 → 6e6D → 9×9 Ableitung
+    derive(){
+        return {
+            pos: {
+                mode: this.prefetchMode(),
+                layer: [3, 6, 9],
+                relation: "3x3 → 6e6D → 9x9"
+            },
+            engine: {
+                mode: "ULTRA-KERNEL",
+                ctrl: true,
+                bind: "9x9 + 3x3 + 6e6D"
+            },
+            matrix: this.matrix
+        };
+    }
+};
